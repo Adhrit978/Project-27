@@ -128,6 +128,17 @@ function keyReleased () {
 //Display arrow and Tranjectory
 function showArrows(index, arrows) {
   arrows[index].display();
+  if (arrows[index].body.position.x>width || 
+    arrows[index].body.position.y>height) {
+      if (!arrows[index].isRemoved) {
+        arrows[index].isRemoved=true;
+        Matter.World.remove(world, arrows[index].body);
+        arrows.splice(index, 1);
+      }
+      else{
+        arrows[index].trajectory=[];
+      }
+    }
 }
 
 function handleComputerArcher() {
@@ -172,6 +183,14 @@ function handlePlayerArrowCollision() {
     if (basecollision.collided || archercollision.collided 
       || computercollision.collided) {
         console.log("Computer Hit");
+        if (!playerArrows[i].isRemoved) {
+          playerArrows[i].isRemoved=true;
+          Matter.World.remove(world, playerArrows[i].body);
+          playerArrows.splice(i, 1);
+        }
+        else{
+          playerArrows[i].trajectory=[];
+        }
     }
   }
 }
@@ -187,6 +206,11 @@ function handleComputerArrowCollision() {
     if (basecollision.collided || archercollision.collided 
       || playercollision.collided) {
         console.log("Player Hit");
+        if (!computerArrows[i].isRemoved) {
+          computerArrows[i].isRemoved=true;
+          Matter.World.remove(world, computerArrows[i].body);
+          computerArrows.splice(i, 1);
+        }
     }
   }
 }
